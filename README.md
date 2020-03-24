@@ -1,5 +1,5 @@
 # gitsie
-[![Build Status](https://travis-ci.org/hatlesshacker/gitsie.svg?branch=master)](https://travis-ci.org/hatlesshacker/gitsie) ![GitHub top language](https://img.shields.io/github/languages/top/hatlesshacker/gitsie) ![license](https://img.shields.io/github/license/hatlesshacker/gitsie) ![code size](https://img.shields.io/github/languages/code-size/hatlesshacker/gitsie)
+[![Build Status](https://travis-ci.org/hatlesshacker/gitsie.svg?branch=master)](https://travis-ci.org/hatlesshacker/gitsie) ![CircleCI](https://img.shields.io/circleci/build/gh/hatlesshacker/gitsie/master) ![GitHub top language](https://img.shields.io/github/languages/top/hatlesshacker/gitsie) ![license](https://img.shields.io/github/license/hatlesshacker/gitsie) ![code size](https://img.shields.io/github/languages/code-size/hatlesshacker/gitsie)
 
 #### <a href="https://madewithlove.org.in" target="_blank">Made with <span style="color: #e74c3c">&hearts;</span> in India</a>
 ## Overview
