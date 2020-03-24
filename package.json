@@ -1,6 +1,6 @@
 {
   "name": "gitsie",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Github Package manager",
   "main": "./src/app.js",
   "bin": {
