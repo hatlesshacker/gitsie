@@ -1,0 +1,28 @@
+{
+  "name": "gitsie",
+  "version": "1.0.0",
+  "description": "Github Package manager",
+  "main": "./src/app.js",
+  "bin": {
+    "gitsie": "./src/app.js"
+  },
+  "scripts": {
+    "test": "./src/app.js -h && ./src/app.js -s hatlesshacker/LibFalcon && ./src/app.js -r hatlesshacker/LibFalcon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hatlesshacker/gitsie.git"
+  },
+  "author": "Syed Nasim",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/hatlesshacker/gitsie/issues"
+  },
+  "homepage": "https://github.com/hatlesshacker/gitsie#readme",
+  "dependencies": {
+    "adm-zip": "^0.4.14",
+    "github-api": "^3.3.0",
+    "md5": "^2.2.1",
+    "wget-improved": "^3.2.0"
+  }
+}
