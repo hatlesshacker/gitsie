@@ -76,6 +76,7 @@ function stage_2(reponame, username, gitsie_dir) {
                             return;
                         }
                         console.log(stdout);
+                        FS.unlinkSync(gitsie_dir+"/temp/postretrieve") //Remove temporary script
                     });
                 }
             });
