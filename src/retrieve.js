@@ -136,7 +136,7 @@ var retrieve = function (repo_req) {
         }
 
 
-    })
+    }).catch(error => { throw error})
 
 
 
