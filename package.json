@@ -7,7 +7,7 @@
     "gitsie": "./src/app.js"
   },
   "scripts": {
-    "test": "./src/app.js -h && ./src/app.js -s hatlesshacker/LibFalcon && ./src/app.js -r hatlesshacker/LibFalcon"
+    "test": "./testscript"
   },
   "repository": {
     "type": "git",
