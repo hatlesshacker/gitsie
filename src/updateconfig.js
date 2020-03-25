@@ -22,10 +22,13 @@ var updateconfig_new = function (repo_req, release) {
                 }
                 entries.push(current_entry)
                 //console.log(JSON.stringify(entries))
-                FS.writeFile(gitsie_dir+"/conf", JSON.stringify(entries), (err) => {
+                /*FS.writeFile(gitsie_dir+"/conf", JSON.stringify(entries), (err) => {
                     if (err) console.log(err);
                     console.log("Records updated.");
-                });
+                });*/
+
+                FS.writeFileSync(gitsie_dir+"/conf", JSON.stringify(entries))
+                console.log("Records updated.");
             } else {
                 prev_conf_data = JSON.parse(data)
                 current_entry = {
@@ -34,10 +37,12 @@ var updateconfig_new = function (repo_req, release) {
                     package : pack_name_encoded
                 }
                 prev_conf_data.push(current_entry)
-                FS.writeFile(gitsie_dir+"/conf", JSON.stringify(prev_conf_data), (err) => {
+                /*FS.writeFile(gitsie_dir+"/conf", JSON.stringify(prev_conf_data), (err) => {
                     if (err) console.log(err);
                     console.log("Records updated.");
-                });
+                });*/
+                FS.writeFileSync(gitsie_dir+"/conf", JSON.stringify(prev_conf_data))
+                console.log("Records updated.");
             }
         }
     })

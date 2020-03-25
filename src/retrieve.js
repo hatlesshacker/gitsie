@@ -9,7 +9,31 @@ var Config   = require('./updateconfig');
 
 var gh_handle = new GitHub();
 
+function stage_2(reponame, username) {
+    //ACTUALLY RETRIEVE THE REPO
+    console.log("Retrieving "+reponame+", by @"+username)
+    var repo = gh_handle.getRepo(username, reponame)
+    repo.listReleases(function(err, releases) {
+        release = releases[0]
+
+        console.log("** getting release #"+release['id']+" :: "+release['name'])
+        console.log("** published on "+release['published_at'])
+
+        //STEP1: DOWNLOAD THE REPO
+        url = "https://github.com/"+username+"/"+reponame+"/archive/"+release['tag_name']+".zip"
+        Download.download(url)
+
+        //STEP2: UPDATE CONFIG
+        Config.updateconfig_new(repo_req, release);
+
+        
+    }).catch((error) => {
+        console.log('ERROR:', error)
+    });
+}
+
 var retrieve = function (repo_req) {
+
     //obtain the zip file of the repository, and update .gitsie/conf
     user_repo = repo_req.split("/")
     username = user_repo[0]
@@ -19,7 +43,61 @@ var retrieve = function (repo_req) {
     //We need to implement another Search() here
 
     var author = gh_handle.getUser(username);
-    author.listRepos(function(err, repos) {
+
+    author.listRepos(function (err, repos) {
+        var i;
+        stat = false
+        for (i=0; i<=repos.length-1; i++){
+            var repo = repos[i];
+            if (repo['full_name'] == this.repo_req){
+                stat = true
+                break
+            }
+        }
+        if (stat == false){
+            console.log("Specified repository doesn't exist!")
+            process.exit()
+        }
+
+        //If we are here, it means that the repo definitely exists.
+        const homedir = require('os').homedir();
+        var gitsie_dir = homedir+'/.gitsie';
+        pack_name_encoded = Md5(repo_req)
+
+        conf_contents = FS.readFileSync(gitsie_dir+"/conf", "utf-8")
+        if (conf_contents.length == 0){ // No packages currently installed
+            stage_2(reponame, username)
+        } else { // Config is not empty, the pack might be already present 
+            conf_contents_data = JSON.parse(conf_contents)
+            var l;
+            for (l=0; l<=conf_contents_data.length-1; l++){
+                record = conf_contents_data[l];
+                if (record['name'] == repo_req){
+                    console.log("Package "+ repo_req+ " is already present")
+                    process.exit()
+                }
+            }
+
+            //Package not present.
+            stage_2(reponame, username)
+        }
+
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*author.listRepos(function(err, repos) {
         var i;
         repo_list_author = []
         stat = false
@@ -32,70 +110,19 @@ var retrieve = function (repo_req) {
             }
         }
 
-        if (stat == true){
-            console.log("Retrieving "+reponame+", by @"+username)
-            
-            var rep = gh_handle.getRepo(username, reponame)
-            rep.listReleases(function(err, releases) {
-                release = releases[0]
-
-                const homedir = require('os').homedir();
-                var gitsie_dir = homedir+'/.gitsie';
-                pack_name_encoded = Md5(repo_req)
-
-                //Check if the release requested is already present or not.
-                FS.readFile(gitsie_dir+"/conf", "utf-8", (err, data) => {
-                    if (err) {
-                        console.log("ERROR: "+err)
-                    } else{
-                        if (data.length != 0){
-                            prev_conf_data = JSON.parse(data)                            
-                            var l;
-                            for (l=0; l<=prev_conf_data.length-1; l++){
-                                record = prev_conf_data[l];
-                                if (record['name'] == repo_req){
-                                    console.log("Package "+ repo_req+ " is already present")
-                                    process.exit()
-                                }
-                            }
-
-                            //All clear here
-                            console.log("** getting release #"+release['id']+" :: "+release['name'])
-                            console.log("** published on "+release['published_at'])
-
-                            //STEP1: DOWNLOAD THE REPO
-                            url = "https://github.com/"+username+"/"+reponame+"/archive/"+release['tag_name']+".zip"
-                            Download.download(url)
-
-                            //STEP2: UPDATE CONFIG
-                            Config.updateconfig_new(repo_req, release);
-
-
-
-                        } else {
-                            //All clear here
-                            console.log("** getting release #"+release['id']+" :: "+release['name'])
-                            console.log("** published on "+release['published_at'])
-
-                            //STEP1: DOWNLOAD THE REPO
-                            url = "https://github.com/"+username+"/"+reponame+"/archive/"+release['tag_name']+".zip"
-                            Download.download(url)
-
-                            //STEP2: UPDATE CONFIG
-                            Config.updateconfig_new(repo_req, release);
-                        }
-                    }
-                })
-            }).catch((error) => {
-                console.log('ERROR:', error)
-            });
-
-        } else {
+        if (stat == false){
             console.log("Specified repository doesn't exist!")
+            process.exit()
+        } else {
+            //Repository DOES exist
+            console.log("Specified repository does exist.")
+
+            
+
         }
-     }).catch((error) => {
+    }).catch((error) => {
         console.log('ERROR:', error)
-    });
+    });*/
 }
 
 module.exports = {retrieve}
