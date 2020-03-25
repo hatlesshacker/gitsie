@@ -3,13 +3,13 @@ var GitHub   = require('github-api');
 var Https    = require('https');
 var Md5      = require('md5');
 var FS       = require('fs');
+var Events   = require('events');
 var Wget     = require('wget-improved');
-var Download = require('./download');
 var Config   = require('./updateconfig');
 
 var gh_handle = new GitHub();
 
-function stage_2(reponame, username) {
+function stage_2(reponame, username, gitsie_dir) {
     //ACTUALLY RETRIEVE THE REPO
     console.log("Retrieving "+reponame+", by @"+username)
     var repo = gh_handle.getRepo(username, reponame)
@@ -18,15 +18,30 @@ function stage_2(reponame, username) {
 
         console.log("** getting release #"+release['id']+" :: "+release['name'])
         console.log("** published on "+release['published_at'])
+        console.log()
 
         //STEP1: DOWNLOAD THE REPO
         url = "https://github.com/"+username+"/"+reponame+"/archive/"+release['tag_name']+".zip"
-        Download.download(url)
-
-        //STEP2: UPDATE CONFIG
-        Config.updateconfig_new(repo_req, release);
-
+        //Download.download(url)
+        const output = gitsie_dir+"/packages/"+pack_name_encoded;
+        options = {
+        protocol : 'https',
+            headers  : {
+                'User-Agent': 'Node'
+            }
+        }
+    
+        let download = Wget.download(url, output, options);
+        download.on('error', function(err) {
+            console.log(err);
+        });      
         
+        download.on('end', function(output) {
+            console.log("Finished Downloading.");
+
+            //STEP2: UPDATE CONFIG
+            Config.updateconfig_new(repo_req, release);
+        });        
     }).catch((error) => {
         console.log('ERROR:', error)
     });
@@ -66,7 +81,7 @@ var retrieve = function (repo_req) {
 
         conf_contents = FS.readFileSync(gitsie_dir+"/conf", "utf-8")
         if (conf_contents.length == 0){ // No packages currently installed
-            stage_2(reponame, username)
+            stage_2(reponame, username, gitsie_dir)
         } else { // Config is not empty, the pack might be already present 
             conf_contents_data = JSON.parse(conf_contents)
             var l;
@@ -79,7 +94,7 @@ var retrieve = function (repo_req) {
             }
 
             //Package not present.
-            stage_2(reponame, username)
+            stage_2(reponame, username, gitsie_dir)
         }
 
 
