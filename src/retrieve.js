@@ -4,6 +4,7 @@ var Https    = require('https');
 var Md5      = require('md5');
 var FS       = require('fs');
 var Events   = require('events');
+var AdmZip   = require('adm-zip');
 var Wget     = require('wget-improved');
 var Config   = require('./updateconfig');
 
@@ -41,6 +42,43 @@ function stage_2(reponame, username, gitsie_dir) {
 
             //STEP2: UPDATE CONFIG
             Config.updateconfig_new(repo_req, release);
+
+
+
+            //STEP3: EXECUTE POSTRETRIEVE SCRIPT IF PRESENT
+            
+            //console.log("Running post-retrieve script of "+record['name'])
+            archive = gitsie_dir+"/packages/"+pack_name_encoded
+
+            //Check if the post-retrieve script is present
+            var zip = new AdmZip(archive);
+            var zipEntries = zip.getEntries();
+            postretrieve_entry_name = reponame+"-"+release['tag_name']+"/.gitsie/postretrieve"
+            
+            zipEntries.forEach(function(zipEntry) {
+                if (zipEntry.entryName == postretrieve_entry_name) {
+                    //The script is indeed present
+                    zip.extractEntryTo(postretrieve_entry_name, gitsie_dir+"/temp/",false,true);
+                    //Run the script
+                    const execSync  = require('child_process').execSync;
+                    const execASync = require('child_process').exec;
+                    console.log("------Executing postretrieve script-----")
+                    execSync("chmod +x " + gitsie_dir+"/temp/postretrieve")
+                    //console.log(execSync(gitsie_dir+"/temp/postretrieve"))
+
+                    execASync(gitsie_dir+"/temp/postretrieve", (error, stdout, stderr) => {
+                        if (error) {
+                            console.log(`error: ${error.message}`);
+                            return;
+                        }
+                        if (stderr) {
+                            console.log(`stderr: ${stderr}`);
+                            return;
+                        }
+                        console.log(stdout);
+                    });
+                }
+            });
         });        
     }).catch((error) => {
         console.log('ERROR:', error)
