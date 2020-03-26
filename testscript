@@ -3,3 +3,4 @@
 ./src/app.js -s hatlesshacker/example-gitsie-repo
 ./src/app.js -r hatlesshacker/example-gitsie-repo
 ./src/app.js -i hatlesshacker/example-gitsie-repo $HOME
+./src/app.js -d hatlesshacker/example-gitsie-repo
