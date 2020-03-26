@@ -1,4 +1,4 @@
-var showhelp = function () {
+var showhelp = function() {
     console.log("gitsie: The github package manager")
     console.log("Usage: gitsie [options] [package]")
     console.log("")
@@ -10,4 +10,6 @@ var showhelp = function () {
     console.log("  -h   /  help       Show this help message")
 }
 
-module.exports = {showhelp}
+module.exports = {
+    showhelp
+}
