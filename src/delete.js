@@ -1,5 +1,8 @@
 var Md5 = require('md5');
 var FS = require('fs');
+var Md5 = require('md5');
+const Spawn = require('cross-spawn');
+var AdmZip = require('adm-zip');
 
 var delete_src = function(name) {
     //Check whether the mentioned repo exists in the system or not
@@ -18,9 +21,35 @@ var delete_src = function(name) {
             if (record['name'] == name) {
                 //Match found. The mentioned package is present in the system.
 
+                user_repo = name.split("/")
+                username = user_repo[0]
+                reponame = user_repo[1]
+                pack_name_encoded = Md5(name)
+                archive = gitsie_dir + "/packages/" + pack_name_encoded
+
+                var zip = new AdmZip(archive);
+                var zipEntries = zip.getEntries();
+                predelete_entry_name = reponame + "-" + record['tag_name'] + "/.gitsie/predelete"
+
+                zipEntries.forEach(function(zipEntry) {
+                    if (zipEntry.entryName == predelete_entry_name) {
+                        //The script is indeed present
+                        zip.extractEntryTo(predelete_entry_name, gitsie_dir + "/temp/", false, true);
+                        //Run the script
+                        console.log("------Executing predelete script-----")
+                        const result_chmod = Spawn.sync("chmod", ['+x', gitsie_dir + "/temp/predelete"], {
+                            stdio: 'inherit'
+                        });
+                        const result_run = Spawn.sync(gitsie_dir + "/temp/predelete", [], {
+                            stdio: 'inherit'
+                        });
+                        console.log("---------------------------------------")
+                        FS.unlinkSync(gitsie_dir + "/temp/predelete") //Remove temporary script                    
+                    }
+                });
+
                 //STEP1: remove the corresponding archive
-                archive_name = record['package']
-                FS.unlinkSync(gitsie_dir + "/packages/" + archive_name)
+                FS.unlinkSync(archive)
 
                 //STEP2: remove the entry
                 prev_conf_data.splice(l, 1)

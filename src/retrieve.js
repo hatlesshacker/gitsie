@@ -47,10 +47,7 @@ function stage_2(reponame, username, gitsie_dir) {
 
 
             //STEP3: EXECUTE POSTRETRIEVE SCRIPT IF PRESENT
-
-            //console.log("Running post-retrieve script of "+record['name'])
             archive = gitsie_dir + "/packages/" + pack_name_encoded
-
             //Check if the post-retrieve script is present
             var zip = new AdmZip(archive);
             var zipEntries = zip.getEntries();
@@ -132,45 +129,6 @@ var retrieve = function(repo_req) {
     }).catch(error => {
         throw error
     })
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*author.listRepos(function(err, repos) {
-        var i;
-        repo_list_author = []
-        stat = false
-        repo_len = repos.length
-        for (i=0; i<=repo_len-1; i++){
-            var repo = repos[i];
-            if (repo['full_name'] == this.repo_req){
-                stat = true
-                break
-            }
-        }
-
-        if (stat == false){
-            console.log("Specified repository doesn't exist!")
-            process.exit()
-        } else {
-            //Repository DOES exist
-            console.log("Specified repository does exist.")
-
-            
-
-        }
-    }).catch((error) => {
-        console.log('ERROR:', error)
-    });*/
 }
 
 module.exports = {
