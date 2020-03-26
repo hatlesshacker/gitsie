@@ -18,7 +18,8 @@ var updateconfig_new = function(repo_req, release) {
                 current_entry = {
                     name: repo_req,
                     published_on: release['published_at'],
-                    package: pack_name_encoded
+                    package: pack_name_encoded,
+                    tag_name: release['tag_name']
                 }
                 entries.push(current_entry)
                 //console.log(JSON.stringify(entries))
@@ -34,7 +35,8 @@ var updateconfig_new = function(repo_req, release) {
                 current_entry = {
                     name: repo_req,
                     published_on: release['published_at'],
-                    package: pack_name_encoded
+                    package: pack_name_encoded,
+                    tag_name: release['tag_name']
                 }
                 prev_conf_data.push(current_entry)
                 /*FS.writeFile(gitsie_dir+"/conf", JSON.stringify(prev_conf_data), (err) => {
