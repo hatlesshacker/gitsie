@@ -21,6 +21,7 @@
   "homepage": "https://github.com/hatlesshacker/gitsie#readme",
   "dependencies": {
     "adm-zip": "^0.4.14",
+    "cross-spawn": "^7.0.1",
     "github-api": "^3.3.0",
     "md5": "^2.2.1",
     "wget-improved": "^3.2.0"

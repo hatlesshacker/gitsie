@@ -7,6 +7,7 @@ var Events = require('events');
 var AdmZip = require('adm-zip');
 var Wget = require('wget-improved');
 var Config = require('./updateconfig');
+const Spawn = require('cross-spawn');
 
 var gh_handle = new GitHub();
 
@@ -60,24 +61,15 @@ function stage_2(reponame, username, gitsie_dir) {
                     //The script is indeed present
                     zip.extractEntryTo(postretrieve_entry_name, gitsie_dir + "/temp/", false, true);
                     //Run the script
-                    const execSync = require('child_process').execSync;
-                    const execASync = require('child_process').exec;
                     console.log("------Executing postretrieve script-----")
-                    execSync("chmod +x " + gitsie_dir + "/temp/postretrieve")
-                    //console.log(execSync(gitsie_dir+"/temp/postretrieve"))
-
-                    execASync(gitsie_dir + "/temp/postretrieve", (error, stdout, stderr) => {
-                        if (error) {
-                            console.log(`error: ${error.message}`);
-                            return;
-                        }
-                        if (stderr) {
-                            console.log(`stderr: ${stderr}`);
-                            return;
-                        }
-                        console.log(stdout);
-                        FS.unlinkSync(gitsie_dir + "/temp/postretrieve") //Remove temporary script
+                    const result_chmod = Spawn.sync("chmod", ['+x', gitsie_dir + "/temp/postretrieve"], {
+                        stdio: 'inherit'
                     });
+                    const result_run = Spawn.sync(gitsie_dir + "/temp/postretrieve", [], {
+                        stdio: 'inherit'
+                    });
+                    console.log("---------------------------------------")
+                    FS.unlinkSync(gitsie_dir + "/temp/postretrieve") //Remove temporary script                    
                 }
             });
         });
