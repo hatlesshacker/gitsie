@@ -6,6 +6,29 @@ var install = function(name, loc) {
     const homedir = require('os').homedir();
     var gitsie_dir = homedir + '/.gitsie';
 
+    if (name == null) {
+        console.log("Enter the name of the repo to install")
+        process.exit()
+    }
+
+    if (loc == null) {
+        console.log("Enter the location")
+        process.exit()
+    }
+
+    user_repo = name.split("/")
+    if (user_repo.length != 2) {
+        console.log("Invalid repo name")
+        process.exit()
+    }
+    username = user_repo[0]
+    reponame = user_repo[1]
+
+    if (username.length == 0 || reponame.length == 0) {
+        console.log("Invalid repo name")
+        process.exit()
+    }
+
     conf_contents = FS.readFileSync(gitsie_dir + "/conf", "utf-8")
     if (conf_contents.length == 0) {
         console.log("Package " + name + " is not present in the system")
@@ -17,11 +40,6 @@ var install = function(name, loc) {
             record = prev_conf_data[l];
             if (record['name'] == name) {
                 //Match found. The mentioned package is present in the system.
-
-                user_repo = record['name'].split("/")
-                username = user_repo[0]
-                reponame = user_repo[1]
-
                 archive = gitsie_dir + "/packages/" + record['package']
                 var zip = new AdmZip(archive);
                 var zipEntries = zip.getEntries();

@@ -77,10 +77,22 @@ function stage_2(reponame, username, gitsie_dir) {
 
 var retrieve = function(repo_req) {
 
-    //obtain the zip file of the repository, and update .gitsie/conf
+    if (repo_req == null) {
+        console.log("Enter the name of the repo to retrieve")
+        process.exit()
+    }
+
     user_repo = repo_req.split("/")
+    if (user_repo.length != 2) {
+        console.log("Invalid repo name")
+        process.exit()
+    }
     username = user_repo[0]
     reponame = user_repo[1]
+    if (username.length == 0 || reponame.length == 0) {
+        console.log("Invalid repo name")
+        process.exit()
+    }
 
     //Check that the repo actually exists
     //We need to implement another Search() here

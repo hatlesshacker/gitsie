@@ -5,6 +5,23 @@ const Spawn = require('cross-spawn');
 var AdmZip = require('adm-zip');
 
 var delete_src = function(name) {
+    if (name == null) {
+        console.log("Enter the name of the repo to delete")
+        process.exit()
+    }
+
+    user_repo = name.split("/")
+    if (user_repo.length != 2) {
+        console.log("Invalid repo name")
+        process.exit()
+    }
+    username = user_repo[0]
+    reponame = user_repo[1]
+    if (username.length == 0 || reponame.length == 0) {
+        console.log("Invalid repo name")
+        process.exit()
+    }
+
     //Check whether the mentioned repo exists in the system or not
     const homedir = require('os').homedir();
     var gitsie_dir = homedir + '/.gitsie';
@@ -20,10 +37,6 @@ var delete_src = function(name) {
             record = prev_conf_data[l];
             if (record['name'] == name) {
                 //Match found. The mentioned package is present in the system.
-
-                user_repo = name.split("/")
-                username = user_repo[0]
-                reponame = user_repo[1]
                 pack_name_encoded = Md5(name)
                 archive = gitsie_dir + "/packages/" + pack_name_encoded
 
