@@ -57,7 +57,7 @@ var install = function(name, loc) {
                         const result_chmod = Spawn.sync("chmod", ['+x', gitsie_dir + "/temp/preinstall"], {
                             stdio: 'inherit'
                         });
-                        const result_run = Spawn.sync(gitsie_dir + "/temp/preinstall", [], {
+                        const result_run = Spawn.sync(gitsie_dir + "/temp/preinstall", [loc], {
                             stdio: 'inherit'
                         });
                         console.log(colors.brightCyan("---------------------------------------"))
@@ -84,7 +84,7 @@ var install = function(name, loc) {
                         const result_chmod = Spawn.sync("chmod", ['+x', gitsie_dir + "/temp/postinstall"], {
                             stdio: 'inherit'
                         });
-                        const result_run = Spawn.sync(gitsie_dir + "/temp/postinstall", [], {
+                        const result_run = Spawn.sync(gitsie_dir + "/temp/postinstall", [loc], {
                             stdio: 'inherit'
                         });
                         console.log(colors.brightCyan("---------------------------------------"))
