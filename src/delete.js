@@ -3,22 +3,23 @@ var FS = require('fs');
 var Md5 = require('md5');
 const Spawn = require('cross-spawn');
 var AdmZip = require('adm-zip');
+var colors = require('colors');
 
 var delete_src = function(name) {
     if (name == null) {
-        console.log("Enter the name of the repo to delete")
+        console.log(colors.red("Enter the name of the repo to delete"))
         process.exit()
     }
 
     user_repo = name.split("/")
     if (user_repo.length != 2) {
-        console.log("Invalid repo name")
+        console.log(colors.red("Invalid repo name"))
         process.exit()
     }
     username = user_repo[0]
     reponame = user_repo[1]
     if (username.length == 0 || reponame.length == 0) {
-        console.log("Invalid repo name")
+        console.log(colors.red("Invalid repo name"))
         process.exit()
     }
 
@@ -28,7 +29,7 @@ var delete_src = function(name) {
 
     conf_contents = FS.readFileSync(gitsie_dir + "/conf", "utf-8")
     if (conf_contents.length == 0) {
-        console.log("Package " + name + " is not present in the system")
+        console.log(colors.brightCyan("Package " + name + " is not present in the system"))
         process.exit()
     } else {
         prev_conf_data = JSON.parse(conf_contents)
@@ -49,14 +50,14 @@ var delete_src = function(name) {
                         //The script is indeed present
                         zip.extractEntryTo(predelete_entry_name, gitsie_dir + "/temp/", false, true);
                         //Run the script
-                        console.log("------Executing predelete script-----")
+                        console.log(colors.brightCyan("------Executing predelete script-----"))
                         const result_chmod = Spawn.sync("chmod", ['+x', gitsie_dir + "/temp/predelete"], {
                             stdio: 'inherit'
                         });
                         const result_run = Spawn.sync(gitsie_dir + "/temp/predelete", [], {
                             stdio: 'inherit'
                         });
-                        console.log("---------------------------------------")
+                        console.log(colors.brightCyan("---------------------------------------"))
                         FS.unlinkSync(gitsie_dir + "/temp/predelete") //Remove temporary script                    
                     }
                 });
@@ -66,21 +67,20 @@ var delete_src = function(name) {
 
                 //STEP2: remove the entry
                 prev_conf_data.splice(l, 1)
-                //console.log(JSON.stringify(prev_conf_data))
                 FS.writeFileSync(gitsie_dir + "/conf", JSON.stringify(prev_conf_data), (err) => {
                     if (err) {
-                        console.log(err);
+                        console.log(colors.brightCyan(err));
                     } else {
-                        console.log("Records updated.");
+                        console.log(colors.brightCyan("Records updated."));
                     }
                 });
 
-                console.log("Removed package " + name)
+                console.log(colors.brightCyan("Removed package " + name))
                 process.exit()
             }
         }
 
-        console.log("Package " + name + " is not present in the system")
+        console.log(colors.brightCyan("Package " + name + " is not present in the system"))
         process.exit()
     }
 }

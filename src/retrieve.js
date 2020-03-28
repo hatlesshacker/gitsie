@@ -8,18 +8,19 @@ var AdmZip = require('adm-zip');
 var Wget = require('wget-improved');
 var Config = require('./updateconfig');
 const Spawn = require('cross-spawn');
+var colors = require('colors');
 
 var gh_handle = new GitHub();
 
 function stage_2(reponame, username, gitsie_dir) {
     //ACTUALLY RETRIEVE THE REPO
-    console.log("Retrieving " + reponame + ", by @" + username)
+    console.log(colors.brightCyan("Retrieving " + reponame + ", by @" + username))
     var repo = gh_handle.getRepo(username, reponame)
     repo.listReleases(function(err, releases) {
         release = releases[0]
 
-        console.log("** getting release #" + release['id'] + " :: " + release['name'])
-        console.log("** published on " + release['published_at'])
+        console.log(colors.brightCyan("** getting release #" + release['id'] + " :: " + release['name']))
+        console.log(colors.brightCyan("** published on " + release['published_at']))
         console.log()
 
         //STEP1: DOWNLOAD THE REPO
@@ -35,11 +36,11 @@ function stage_2(reponame, username, gitsie_dir) {
 
         let download = Wget.download(url, output, options);
         download.on('error', function(err) {
-            console.log(err);
+            console.log(colors.red(err));
         });
 
         download.on('end', function(output) {
-            console.log("Finished Downloading.");
+            console.log(colors.brightCyan("Finished Downloading."));
 
             //STEP2: UPDATE CONFIG
             Config.updateconfig_new(repo_req, release);
@@ -58,39 +59,39 @@ function stage_2(reponame, username, gitsie_dir) {
                     //The script is indeed present
                     zip.extractEntryTo(postretrieve_entry_name, gitsie_dir + "/temp/", false, true);
                     //Run the script
-                    console.log("------Executing postretrieve script-----")
+                    console.log(colors.brightCyan("------Executing postretrieve script-----"))
                     const result_chmod = Spawn.sync("chmod", ['+x', gitsie_dir + "/temp/postretrieve"], {
                         stdio: 'inherit'
                     });
                     const result_run = Spawn.sync(gitsie_dir + "/temp/postretrieve", [], {
                         stdio: 'inherit'
                     });
-                    console.log("---------------------------------------")
+                    console.log(colors.brightCyan("---------------------------------------"))
                     FS.unlinkSync(gitsie_dir + "/temp/postretrieve") //Remove temporary script                    
                 }
             });
         });
     }).catch((error) => {
-        console.log('ERROR:', error)
+        console.log(colors.red('ERROR:', error))
     });
 }
 
 var retrieve = function(repo_req) {
 
     if (repo_req == null) {
-        console.log("Enter the name of the repo to retrieve")
+        console.log(colors.red("Enter the name of the repo to retrieve"))
         process.exit()
     }
 
     user_repo = repo_req.split("/")
     if (user_repo.length != 2) {
-        console.log("Invalid repo name")
+        console.log(colors.red("Invalid repo name"))
         process.exit()
     }
     username = user_repo[0]
     reponame = user_repo[1]
     if (username.length == 0 || reponame.length == 0) {
-        console.log("Invalid repo name")
+        console.log(colors.red("Invalid repo name"))
         process.exit()
     }
 
@@ -110,7 +111,7 @@ var retrieve = function(repo_req) {
             }
         }
         if (stat == false) {
-            console.log("Specified repository doesn't exist!")
+            console.log(colors.red("Specified repository doesn't exist!"))
             process.exit()
         }
 
@@ -128,7 +129,7 @@ var retrieve = function(repo_req) {
             for (l = 0; l <= conf_contents_data.length - 1; l++) {
                 record = conf_contents_data[l];
                 if (record['name'] == repo_req) {
-                    console.log("Package " + repo_req + " is already present")
+                    console.log(colors.brightCyan("Package " + repo_req + " is already present"))
                     process.exit()
                 }
             }
