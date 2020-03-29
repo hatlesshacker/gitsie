@@ -11,17 +11,29 @@ const Spawn = require('cross-spawn');
 var colors = require('colors');
 
 var gh_handle = new GitHub();
+var datetime = new Date();
 
 function stage_2(reponame, username, gitsie_dir) {
     //ACTUALLY RETRIEVE THE REPO
     console.log(colors.brightCyan("Retrieving " + reponame + ", by @" + username))
     var repo = gh_handle.getRepo(username, reponame)
     repo.listReleases(function(err, releases) {
-        release = releases[0]
+        //Check if the repo actually has a release or not.
+        if (releases.length != 0) {
+            release = releases[0]
+            console.log(colors.brightCyan("** getting release #" + release['id'] + " :: " + release['name']))
+            console.log(colors.brightCyan("** published on " + release['published_at']))
+            console.log()
+        } else {
+            release = {
+                name: repo_req,
+                published_on: datetime,
+                package: pack_name_encoded,
+                tag_name: "master"
+            }
 
-        console.log(colors.brightCyan("** getting release #" + release['id'] + " :: " + release['name']))
-        console.log(colors.brightCyan("** published on " + release['published_at']))
-        console.log()
+            console.log(colors.brightCyan("** "+repo_req+" currently has no releases. Grabbing the current version"))
+        }
 
         //STEP1: DOWNLOAD THE REPO
         url = "https://github.com/" + username + "/" + reponame + "/archive/" + release['tag_name'] + ".zip"
