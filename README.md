@@ -1,5 +1,6 @@
 # gitsie
-![Gitsie](https://hatlesshacker.github.io/gitsie/Gitsie.png)
+![Gitsie](https://hatlesshacker.github.io/gitsie/Gitsie.png)[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fhatlesshacker%2Fgitsie.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fhatlesshacker%2Fgitsie?ref=badge_shield)
+
 
 [![Build Status](https://travis-ci.org/hatlesshacker/gitsie.svg?branch=master)](https://travis-ci.org/hatlesshacker/gitsie) ![CircleCI](https://img.shields.io/circleci/build/gh/hatlesshacker/gitsie/master) ![GitHub top language](https://img.shields.io/github/languages/top/hatlesshacker/gitsie) ![license](https://img.shields.io/github/license/hatlesshacker/gitsie) ![code size](https://img.shields.io/github/languages/code-size/hatlesshacker/gitsie)
 
@@ -49,3 +50,7 @@ unlike many of the popular package managers, gitsie doesn't come with all the bl
 
 ### Easy to maintain
 As mentioned earlier, all you have to do to customize the user's experience is to edit the 4 control scripts. You may have an interactive build system with issue-resolving; you can implement a system-setup using the post-install script. The choice is yours.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fhatlesshacker%2Fgitsie.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fhatlesshacker%2Fgitsie?ref=badge_large)
