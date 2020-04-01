@@ -6,6 +6,7 @@ var Retrieve = require('./retrieve');
 var ShowHelp = require('./showhelp');
 var Delete = require('./delete');
 var Install = require('./install');
+var List = require('./list');
 var OS = require('os');
 var FS = require('fs');
 
@@ -54,4 +55,10 @@ if (cmdargs[2] == '-i' || cmdargs[2] == 'install') {
     repo_req = cmdargs[3];
     location = cmdargs[4];
     Install.install(repo_req, location)
+}
+
+if (cmdargs[2] == '-l' || cmdargs[2] == 'list') {
+    // user wants to list releases
+    repo_req = cmdargs[3];
+    List.listreleases(repo_req)
 }

@@ -7,6 +7,7 @@ var showhelp = function() {
     console.log("  -r   /  retrieve   Download project sources")
     console.log("  -d   /  delete     Remove project sources")
     console.log("  -i   /  install    Unpack sources to intended location")
+    console.log("  -l   /  list       list releases of a repo")
     console.log("  -h   /  help       Show this help message")
 }
 

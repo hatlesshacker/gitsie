@@ -50,14 +50,14 @@ var delete_src = function(name) {
                         //The script is indeed present
                         zip.extractEntryTo(predelete_entry_name, gitsie_dir + "/temp/", false, true);
                         //Run the script
-                        console.log(colors.brightCyan("------Executing predelete script-----"))
+                        console.log(colors.cyan("------Executing predelete script-----"))
                         const result_chmod = Spawn.sync("chmod", ['+x', gitsie_dir + "/temp/predelete"], {
                             stdio: 'inherit'
                         });
                         const result_run = Spawn.sync(gitsie_dir + "/temp/predelete", [], {
                             stdio: 'inherit'
                         });
-                        console.log(colors.brightCyan("---------------------------------------"))
+                        console.log(colors.cyan("---------------------------------------"))
                         FS.unlinkSync(gitsie_dir + "/temp/predelete") //Remove temporary script                    
                     }
                 });
@@ -69,9 +69,9 @@ var delete_src = function(name) {
                 prev_conf_data.splice(l, 1)
                 FS.writeFileSync(gitsie_dir + "/conf", JSON.stringify(prev_conf_data), (err) => {
                     if (err) {
-                        console.log(colors.brightCyan(err));
+                        console.log(colors.red(err));
                     } else {
-                        console.log(colors.brightCyan("Records updated."));
+                        console.log(colors.cyan("Records updated."));
                     }
                 });
 
