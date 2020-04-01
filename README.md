@@ -1,7 +1,7 @@
 # gitsie
 ![Gitsie](https://hatlesshacker.github.io/gitsie/Gitsie.png)
 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fhatlesshacker%2Fgitsie.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fhatlesshacker%2Fgitsie?ref=badge_shield) [![Build Status](https://travis-ci.org/hatlesshacker/gitsie.svg?branch=master)](https://travis-ci.org/hatlesshacker/gitsie) ![CircleCI](https://img.shields.io/circleci/build/gh/hatlesshacker/gitsie/master) ![GitHub top language](https://img.shields.io/github/languages/top/hatlesshacker/gitsie) ![license](https://img.shields.io/github/license/hatlesshacker/gitsie) ![code size](https://img.shields.io/github/languages/code-size/hatlesshacker/gitsie)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fhatlesshacker%2Fgitsie.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fhatlesshacker%2Fgitsie?ref=badge_shield) [![Build Status](https://travis-ci.org/hatlesshacker/gitsie.svg?branch=master)](https://travis-ci.org/hatlesshacker/gitsie) ![CircleCI](https://img.shields.io/circleci/build/gh/hatlesshacker/gitsie/master) ![GitHub top language](https://img.shields.io/github/languages/top/hatlesshacker/gitsie) ![license](https://img.shields.io/github/license/hatlesshacker/gitsie) ![code size](https://img.shields.io/github/languages/code-size/hatlesshacker/gitsie) [![HitCount](http://hits.dwyl.com/{username}/{project}.svg)](http://hits.dwyl.com/hatlesshacker/gitsie)
 
 #### <a href="https://madewithlove.org.in" target="_blank">Made with <span style="color: #e74c3c">&hearts;</span> in India</a>
 ## Overview
