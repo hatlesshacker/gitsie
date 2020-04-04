@@ -2,6 +2,7 @@ var FS = require('fs');
 var AdmZip = require('adm-zip');
 const Spawn = require('cross-spawn');
 var colors = require('colors');
+var execute = require('exe');
 
 var install = function(name, loc) {
     const homedir = require('os').homedir();
@@ -70,6 +71,19 @@ var install = function(name, loc) {
                 console.log(colors.brightCyan(""))
                 //Actually decompress the archive 
                 zip.extractAllTo(loc, true);
+                
+                //Check if this is an NPM package. If so, run npm update
+                //at the installed folder
+                files = FS.readdirSync(loc +"/"+ reponame + "-" + record['tag_name'])
+                if (files.indexOf('package.json') != -1){
+                    console.log("This is an NPM Package.")
+
+                    pwd = process.env.PWD
+                    process.chdir(loc +"/"+ reponame + "-" + record['tag_name'])
+                    execute("npm update")
+                    process.chdir(pwd)
+                    console.log(colors.brightCyan("Ran NPM update."))
+                }
 
 
                 //SEARCH AND RUN POST-INSTALL SCRIPT

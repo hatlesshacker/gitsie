@@ -23,6 +23,7 @@
     "adm-zip": "^0.4.14",
     "colors": "^1.4.0",
     "cross-spawn": "^7.0.1",
+    "exe": "^1.0.2",
     "github-api": "^3.3.0",
     "md5": "^2.2.1",
     "wget-improved": "^3.2.0"
