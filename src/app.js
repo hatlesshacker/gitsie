@@ -21,7 +21,7 @@ if (!FS.existsSync(gitsie_dir)) {
     FS.mkdirSync(gitsie_dir, 0744);
     FS.mkdirSync(gitsie_dir + "/packages/", 0744);
     //Create the configuration file
-    FS.writeFile(gitsie_dir + "/conf", "", function(data) {
+    FS.writeFile(gitsie_dir + "/conf", "", function (data) {
         return "Can't create configuration file";
     })
     console.log("")
@@ -30,35 +30,27 @@ if (!FS.existsSync(gitsie_dir)) {
 if (cmdargs.length == 2 || cmdargs[2] == '-h' || cmdargs[2] == 'help') {
     //No arguments provided, show help
     ShowHelp.showhelp()
-}
-
-if (cmdargs[2] == '-s' || cmdargs[2] == 'search') {
+} else if (cmdargs[2] == '-s' || cmdargs[2] == 'search') {
     // user wants to search repositories
     repo_req = cmdargs[3];
     Search.search(repo_req);
-}
-
-if (cmdargs[2] == '-r' || cmdargs[2] == 'retrieve') {
+} else if (cmdargs[2] == '-r' || cmdargs[2] == 'retrieve') {
     // user wants to retrieve a repo
     repo_req = cmdargs[3];
     Retrieve.retrieve(repo_req);
-}
-
-if (cmdargs[2] == '-d' || cmdargs[2] == 'delete') {
+} else if (cmdargs[2] == '-d' || cmdargs[2] == 'delete') {
     // user wants to delete a repo
     repo_req = cmdargs[3];
     Delete.delete_src(repo_req)
-}
-
-if (cmdargs[2] == '-i' || cmdargs[2] == 'install') {
+} else if (cmdargs[2] == '-i' || cmdargs[2] == 'install') {
     // user wants to unpack a repo
     repo_req = cmdargs[3];
     location = cmdargs[4];
     Install.install(repo_req, location)
-}
-
-if (cmdargs[2] == '-l' || cmdargs[2] == 'list') {
+} else if (cmdargs[2] == '-l' || cmdargs[2] == 'list') {
     // user wants to list releases
     repo_req = cmdargs[3];
     List.listreleases(repo_req)
+} else {
+    ShowHelp.showhelp()
 }
