@@ -13,14 +13,35 @@ var colors = require('colors');
 var gh_handle = new GitHub();
 var datetime = new Date();
 
-function stage_2(reponame, username, gitsie_dir) {
+function stage_2(reponame, tagname, username, gitsie_dir) {
     //ACTUALLY RETRIEVE THE REPO
     console.log(colors.brightCyan("Retrieving " + reponame + ", by @" + username))
     var repo = gh_handle.getRepo(username, reponame)
-    repo.listReleases(function(err, releases) {
+    repo.listReleases(function (err, releases) {
         //Check if the repo actually has a release or not.
         if (releases.length != 0) {
-            release = releases[0]
+
+            //Check if the user is asking for a specific version
+            // ie: user/repo=version
+            if (tagname == null) {
+                release = releases[0];
+            } else {
+                release = null
+                releases.every(function (rls, index) {
+                    if (rls['tag_name'] == tagname) {
+                        release = rls
+                        return false
+                    } else {
+                        return true
+                    }
+                })
+
+                if (release == null) {
+                    console.log(colors.red("** tag " + tagname + " doesn't exist."))
+                    process.exit()
+                }
+            }
+
             console.log(colors.brightCyan("** getting release #" + release['id'] + " :: " + release['name']))
             console.log(colors.brightCyan("** published on " + release['published_at']))
             console.log()
@@ -32,7 +53,7 @@ function stage_2(reponame, username, gitsie_dir) {
                 tag_name: "master"
             }
 
-            console.log(colors.brightCyan("** "+repo_req+" currently has no releases. Grabbing the current version"))
+            console.log(colors.brightCyan("** " + repo_req + " currently has no releases. Grabbing the current version"))
         }
 
         //STEP1: DOWNLOAD THE REPO
@@ -47,15 +68,15 @@ function stage_2(reponame, username, gitsie_dir) {
         }
 
         let download = Wget.download(url, output, options);
-        download.on('error', function(err) {
+        download.on('error', function (err) {
             console.log(colors.red(err));
         });
 
-        download.on('end', function(output) {
+        download.on('end', function (output) {
             console.log(colors.brightCyan("Finished Downloading."));
 
             //STEP2: UPDATE CONFIG
-            Config.updateconfig_new(repo_req, release);
+            Config.updateconfig_new(username + "/" + reponame, release);
 
 
 
@@ -66,7 +87,7 @@ function stage_2(reponame, username, gitsie_dir) {
             var zipEntries = zip.getEntries();
             postretrieve_entry_name = reponame + "-" + release['tag_name'] + "/.gitsie/postretrieve"
 
-            zipEntries.forEach(function(zipEntry) {
+            zipEntries.forEach(function (zipEntry) {
                 if (zipEntry.entryName == postretrieve_entry_name) {
                     //The script is indeed present
                     zip.extractEntryTo(postretrieve_entry_name, gitsie_dir + "/temp/", false, true);
@@ -88,7 +109,7 @@ function stage_2(reponame, username, gitsie_dir) {
     });
 }
 
-var retrieve = function(repo_req) {
+var retrieve = function (repo_req) {
 
     if (repo_req == null) {
         console.log(colors.red("Enter the name of the repo to retrieve"))
@@ -101,7 +122,17 @@ var retrieve = function(repo_req) {
         process.exit()
     }
     username = user_repo[0]
-    reponame = user_repo[1]
+    reponame_with_tag = user_repo[1]
+
+    if (reponame_with_tag.indexOf("=") == -1) {
+        reponame = reponame_with_tag
+        tagname = null
+    } else {
+        reponame = reponame_with_tag.split("=")[0]
+        tagname = reponame_with_tag.split("=")[1]
+
+        repo_req = username + "/" + reponame
+    }
     if (username.length == 0 || reponame.length == 0) {
         console.log(colors.red("Invalid repo name"))
         process.exit()
@@ -112,12 +143,12 @@ var retrieve = function(repo_req) {
 
     var author = gh_handle.getUser(username);
 
-    author.listRepos(function(err, repos) {
+    author.listRepos(function (err, repos) {
         var i;
         stat = false
         for (i = 0; i <= repos.length - 1; i++) {
             var repo = repos[i];
-            if (repo['full_name'] == this.repo_req) {
+            if (repo['full_name'] == repo_req) {
                 stat = true
                 break
             }
@@ -134,7 +165,7 @@ var retrieve = function(repo_req) {
 
         conf_contents = FS.readFileSync(gitsie_dir + "/conf", "utf-8")
         if (conf_contents.length == 0) { // No packages currently installed
-            stage_2(reponame, username, gitsie_dir)
+            stage_2(reponame, tagname, username, gitsie_dir)
         } else { // Config is not empty, the pack might be already present 
             conf_contents_data = JSON.parse(conf_contents)
             var l;
@@ -147,7 +178,7 @@ var retrieve = function(repo_req) {
             }
 
             //Package not present.
-            stage_2(reponame, username, gitsie_dir)
+            stage_2(reponame, tagname, username, gitsie_dir)
         }
 
 
