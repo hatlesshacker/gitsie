@@ -5,7 +5,7 @@
 
 #### <a href="https://madewithlove.org.in" target="_blank">Made with <span style="color: #e74c3c">&hearts;</span> in India</a>
 ## Overview
-gitsie is a package manager for projets hosted on GitHub. It's covinient to use, and works similar to package managers like `apt`.
+gitsie is a package manager for projects hosted on GitHub. It's convenient to use, and works similar to package managers like `apt`.
 
 ## Quick-Start
 You must have npm installed before installing gitsie.
@@ -45,7 +45,7 @@ The source packages of a repository stay stored on your system until you remove 
 From a developer's point of view, gitsie gives you much needed flexiblity. There are 4 different sripts that trigger on 4 important events: when your repo is being downloaded by the user, before and after the user has installed the repo, and before the user deletes your repo. Customize the 4 scripts to your preference an you have 100% control over your user's experience.
 
 ### Fat-Free
-unlike many of the popular package managers, gitsie doesn't come with all the bloat. the entire project size is about 4 MB, and that includes all the third party libraries, and other redundant stuff.
+Unlike many of the popular package managers, gitsie doesn't come with all the bloat. the entire project size is about 4 MB, and that includes all the third party libraries, and other redundant stuff.
 
 ### Easy to maintain
 As mentioned earlier, all you have to do to customize the user's experience is to edit the 4 control scripts. You may have an interactive build system with issue-resolving; you can implement a system-setup using the post-install script. The choice is yours.
